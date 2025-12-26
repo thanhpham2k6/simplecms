@@ -3,15 +3,14 @@
 ## Phương pháp 1: Cài đặt tự động (Khuyến nghị)
 
 ### Ubuntu/Debian
-
 ```bash
 # Clone repository
-git clone https://github.com/thanhpham2k6/simplecms.git
+git clone https://github.com/yourusername/simplecms.git
 cd simplecms
 
 # Chạy script cài đặt
-sudo chmod +x scripts/install.sh
-sudo ./scripts/install.sh
+sudo chmod +x install.sh
+sudo ./install.sh
 ```
 
 Script sẽ hỏi các thông tin:
@@ -22,15 +21,22 @@ Script sẽ hỏi các thông tin:
 
 ### Hoàn tất cài đặt
 
-1. Mở trình duyệt: `http://your-domain.com/install.php`
-2. Điền thông tin admin
-3. Click "Cài đặt SimpleCMS"
-4. Đăng nhập vào admin panel
+1. Truy cập: `http://your-domain.com`
+2. Tạo admin user đầu tiên thông qua MySQL:
+```bash
+sudo mysql
+USE simplecms;
+
+INSERT INTO users (username, email, password, role, created_at) 
+VALUES ('admin', 'admin@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', NOW());
+-- Password: password
+```
+
+3. Đăng nhập: `http://your-domain.com/login.php`
 
 ## Phương pháp 2: Cài đặt thủ công
 
 ### Bước 1: Cài đặt LAMP Stack
-
 ```bash
 # Update system
 sudo apt update && sudo apt upgrade -y
@@ -46,7 +52,6 @@ sudo apt install php php-mysql php-gd php-mbstring php-xml php-curl libapache2-m
 ```
 
 ### Bước 2: Tạo Database
-
 ```bash
 sudo mysql
 
@@ -59,7 +64,6 @@ EXIT;
 ```
 
 ### Bước 3: Clone và cấu hình
-
 ```bash
 # Clone repository
 cd /var/www/html
@@ -78,13 +82,11 @@ sudo chmod -R 775 /var/www/html/simplecms/uploads
 ```
 
 ### Bước 4: Cấu hình Apache
-
 ```bash
 sudo nano /etc/apache2/sites-available/simplecms.conf
 ```
 
 Thêm:
-
 ```apache
 <VirtualHost *:80>
     ServerName your-domain.com
@@ -100,7 +102,6 @@ Thêm:
     CustomLog ${APACHE_LOG_DIR}/simplecms_access.log combined
 </VirtualHost>
 ```
-
 ```bash
 # Enable site
 sudo a2ensite simplecms.conf
@@ -108,14 +109,26 @@ sudo a2enmod rewrite
 sudo systemctl restart apache2
 ```
 
-### Bước 5: Hoàn tất
+### Bước 5: Tạo bảng database
+```bash
+sudo mysql -u simplecms_user -p simplecms
+```
 
-Truy cập `http://your-domain.com/install.php`
+Chạy SQL từ file hoặc tạo thủ công các bảng như trong `install.php`
+
+### Bước 6: Tạo admin user
+```bash
+sudo mysql -u simplecms_user -p simplecms
+
+INSERT INTO users (username, email, password, role, created_at) 
+VALUES ('admin', 'admin@example.com', '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', 'admin', NOW());
+```
+
+Password mặc định: `password`
 
 ## Cài đặt SSL (HTTPS)
 
 ### Sử dụng Let's Encrypt
-
 ```bash
 # Cài Certbot
 sudo apt install certbot python3-certbot-apache -y
@@ -135,7 +148,6 @@ define('SITE_URL', 'https://your-domain.com');
 ## Troubleshooting
 
 ### Lỗi kết nối database
-
 ```bash
 # Kiểm tra MySQL running
 sudo systemctl status mysql
@@ -147,7 +159,6 @@ FLUSH PRIVILEGES;
 ```
 
 ### Lỗi permission denied
-
 ```bash
 sudo chown -R www-data:www-data /var/www/html/simplecms
 sudo chmod -R 755 /var/www/html/simplecms
@@ -155,16 +166,12 @@ sudo chmod -R 775 /var/www/html/simplecms/uploads
 ```
 
 ### URL rewrite không hoạt động
-
 ```bash
 sudo a2enmod rewrite
 sudo systemctl restart apache2
 ```
 
-Kiểm tra `.htaccess` có trong thư mục root
-
 ### Upload file lỗi
-
 ```bash
 # Tăng giới hạn upload PHP
 sudo nano /etc/php/8.1/apache2/php.ini
@@ -180,13 +187,13 @@ sudo systemctl restart apache2
 
 1. Upload files qua FTP
 2. Tạo database qua cPanel
-3. Sửa `config.php`
-4. Truy cập `yourdomain.com/install.php`
+3. Import database structure
+4. Sửa `config.php`
+5. Đăng nhập với admin user
 
 ## Cập nhật SimpleCMS
-
 ```bash
 cd /var/www/html/simplecms
-sudo git pull origin main
-sudo chown -R www-data:www-data .
+sudo chmod +x scripts/update.sh
+sudo ./scripts/update.sh
 ```
