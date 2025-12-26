@@ -1,0 +1,34 @@
+{
+    "name": "simplecms/simplecms",
+    "description": "Open Source Content Management System",
+    "type": "project",
+    "license": "MIT",
+    "version": "1.0.0",
+    "authors": [
+        {
+            "name": "SimpleCMS Team",
+            "email": "support@simplecms.example.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "ext-pdo": "*",
+        "ext-mbstring": "*",
+        "ext-gd": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "SimpleCMS\\": "includes/"
+        }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "@php -r \"file_exists('config.php') || copy('config.sample.php', 'config.php');\""
+        ]
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true
+    }
+}
