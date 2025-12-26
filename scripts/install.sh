@@ -107,10 +107,10 @@ if [ ! -f "config.php" ]; then
   cp config.sample.php config.php
 
   # Replace placeholders
-  sed -i "s/DB_NAME', '.*'/DB_NAME', '$DB_NAME'/" config.php
-  sed -i "s/DB_USER', '.*'/DB_USER', '$DB_USER'/" config.php
-  sed -i "s/DB_PASS', '.*'/DB_PASS', '$DB_PASS'/" config.php
-  sed -i "s|SITE_URL', '.*'|SITE_URL', 'http://$DOMAIN'|" config.php
+  sed -i'' -e "s/DB_NAME', '.*'/DB_NAME', '$DB_NAME'/" config.php
+  sed -i'' -e "s/DB_USER', '.*'/DB_USER', '$DB_USER'/" config.php
+  sed -i'' -e "s/DB_PASS', '.*'/DB_PASS', '$DB_PASS'/" config.php
+  sed -i'' -e "s|SITE_URL', '.*'|SITE_URL', 'http://$DOMAIN'|" config.php
 
   # Generate random keys
   AUTH_KEY=$(openssl rand -base64 32)
