@@ -1,0 +1,16 @@
+config.php
+.env
+uploads/*
+!uploads/.gitkeep
+plugins/active_plugins.json
+themes/active_theme.txt
+*.log
+.DS_Store
+.vscode/
+.idea/
+vendor/
+*.sql
+*.tar.gz
+backup/
+cache/
+tmp/
