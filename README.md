@@ -161,5 +161,4 @@ Nếu bạn thấy project hữu ích, hãy cho chúng tôi một star trên Git
 ---
 
 **Happy blogging with SimpleCMS!** 🚀
-```
 
